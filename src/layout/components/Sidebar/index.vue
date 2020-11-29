@@ -100,6 +100,10 @@ export default {
           linkName: 'advanced'
         },
         {
+          name: '新兴军工产业',
+          linkName: 'JobLog'
+        },
+        {
           name: '创新资源要素',
           children: [
             {

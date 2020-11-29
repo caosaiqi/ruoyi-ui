@@ -1,6 +1,6 @@
 
 <script>
-
+import DialogCheck from './DialogCheck'
 export default {
   name: "Data",
   props: {
@@ -14,31 +14,15 @@ export default {
   data() {
     return {
       loading: true,
+      dialogCheckVisible: false,
       typeOptions: [],
       // 查询参数
       queryParams: {
         page: 1,
         limit: 10,
       },
-      // 表单参数
-      form: {
-        comment: "",
-        status: ""
-      },
 
       dataList: [],
-      // 表单校验
-      rules: {
-        dictLabel: [
-          { required: true, message: "数据标签不能为空", trigger: "blur" }
-        ],
-        dictValue: [
-          { required: true, message: "数据键值不能为空", trigger: "blur" }
-        ],
-        dictSort: [
-          { required: true, message: "数据顺序不能为空", trigger: "blur" }
-        ]
-      }
     };
   },
   created() {
@@ -99,7 +83,6 @@ export default {
     }
 
     const RenderColumns = () =>{
-      console.log(this.columns)
       return this.columns.map(item => {
         const props = {
           align:'center',
@@ -109,6 +92,27 @@ export default {
       })
     }
 
+    const RenderColumAction = () => {
+      const handleClick = () => {
+
+      }
+      const scopedSlots = {
+        default: ({ row }) => {
+          const texts = {
+            1: '审核',
+            2: '审核通过',
+            3: '审核不通过'
+          }
+          if (row.auditStatus == 1) {
+            return (
+              <el-button onClcik={handleClick} size="mini" type="text">审核</el-button>
+            )
+          }
+          return  <el-button  type="text" size="mini">{texts[row.auditStatus]}</el-button>
+        }
+      }
+      return <el-table-column label='操作' {...{scopedSlots}} />
+    }
 
     const RenderPagination = () => {
       return (
@@ -146,13 +150,15 @@ export default {
           </el-dialog>
       )
     }
+
     return (
       <div class="app-container">
        <el-table {...{ props: tableProps }}>
           <RenderColumns />
+          <RenderColumAction />
         </el-table>
         <RenderPagination />
-        <RenderDialog />
+        <DialogCheck visible={this.dialogCheckVisible} />
       </div>
     )
   }
