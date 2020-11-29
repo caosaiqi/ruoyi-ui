@@ -164,8 +164,8 @@ export const constantRoutes = [
     children: [
       {
         path: 'policy',
-        component: (resolve) => require(['@/views/policy'], resolve),
-        name: 'policy',
+        component: (resolve) => require(['@/views/innovate/policy'], resolve),
+        name: 'Policy',
         meta: { title: '科技创新政策' }
       }
     ]
@@ -177,8 +177,8 @@ export const constantRoutes = [
     children: [
       {
         path: 'resource',
-        component: (resolve) => require(['@/views/resource'], resolve),
-        name: 'resource',
+        component: (resolve) => require(['@/views/innovate/resource'], resolve),
+        name: 'Resource',
         meta: { title: '项目通道资源' }
       }
     ]
@@ -367,6 +367,66 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/resultsType'], resolve),
         name: 'ResultsType',
         meta: { title: '成果类型' }
+      }
+    ]
+  },
+  {
+    path: '/thinkTank',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/innovate/thinkTank'], resolve),
+        name: 'ThinkTank',
+        meta: { title: '智库' }
+      }
+    ]
+  },
+  {
+    path: '/thinkTank',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/innovate/thinkTank'], resolve),
+        name: 'ThinkTank',
+        meta: { title: '智库' }
+      }
+    ]
+  },
+  {
+    path: '/lab',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/innovate/lab'], resolve),
+        name: 'Lab',
+        meta: { title: '实验室' }
+      }
+    ]
+  },
+  {
+    path: '/talent',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/innovate/talent'], resolve),
+        name: 'Talent',
+        meta: { title: '人才/专家' }
+      }
+    ]
+  },
+  {
+    path: '/testPlatform',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/innovate/testPlatform'], resolve),
+        name: 'TestPlatform',
+        meta: { title: '共享实验室设备' }
       }
     ]
   },

@@ -108,31 +108,27 @@ export default {
           children: [
             {
               name: '科技创新政策',
-              linkName: 'policy'
-            },
-            {
-              name: '科技创新政策',
-              linkName: 'policy'
+              linkName: 'Policy'
             },
             {
               name: '项目通道资源',
-              linkName: 'resource'
+              linkName: 'Resource'
             },
             {
               name: '智库',
-              linkName: ''
+              linkName: 'ThinkTank'
             },
             {
               name: '实验室',
-              linkName: 'laboratory'
+              linkName: 'Lab'
             },
             {
               name: '共享实验室设备',
-              linkName: ''
+              linkName: 'TestPlatform'
             },
             {
               name: '人才/专家',
-              linkName: ''
+              linkName: 'Talent'
             },
           ]
         },

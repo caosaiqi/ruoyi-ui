@@ -1,12 +1,4 @@
 <script>
-import {
-  listData,
-  getData,
-  delData,
-  addData,
-  updateData,
-  exportData,
-} from "@/api/system/dict/data";
 
 import CommonList from '@/components/CommonList'
 import API from "@/api/system/advanced";
