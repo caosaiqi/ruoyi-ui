@@ -1,216 +1,3 @@
-<template>
-  <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
-      <el-form-item label="需求名称" prop="dictType"  >
-        <el-input v-model="queryParams.demandName" size="small" clearable  placeholder="请输入名称"></el-input>
-      </el-form-item>
-      <el-form-item label="时间" prop="dictLabel">
-        <el-date-picker
-          v-model="value1"
-          type="daterange"
-          range-separator="至"
-          size="small"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          clearable
-        >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="需求:" >
-        <el-select
-          v-model="queryParams.demandType"
-          placeholder="请选择需求类型"
-          clearable
-        >
-          <el-option
-            :label="item.name"
-            :value="item.id"
-            v-for="(item, index) in typelist"
-            :key="index"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="领域:" >
-        <el-select v-model="queryParams.domainId" placeholder="请选择领域" clearable>
-          <el-option
-            :label="item.name"
-            :value="item.id"
-            v-for="(item, index) in ltypelist"
-            :key="index"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="cyan"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <!-- <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button> -->
-      </el-form-item>
-    </el-form>
-<!-- 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:dict:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:dict:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:dict:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:dict:export']"
-          >导出</el-button
-        >
-      </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row> -->
-    <el-table
-      v-loading="loading"
-      :data="dataList"
-    
-    >
-      <!-- <el-table-column type="selection" width="55" align="center" /> -->
-      <el-table-column label="需求名称" align="center" prop="demandName"  />
-      <el-table-column label="需求说明" align="center" prop="description" :show-overflow-tooltip="true" />
-      <el-table-column label="领域" align="center" prop="domainName" />
-      <el-table-column label="发布类型" align="center" prop="typeName" />
-      <el-table-column
-        label="发布方"
-        align="center"
-        prop="publisherName"
-      />
-      <el-table-column
-        label="深度分析"
-        align="center"
-        prop="analysis"
-        
-      >
-      <template slot-scope="scope">
-          <a :href="scope.row.materialUrl" download="test.pdf">{{scope.row.analysis}}</a>
-        </template>
-        </el-table-column     >
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="handleUpdate(scope.row)"
-           v-if="scope.row.auditStatus=='1'" >审核</el-button
-          >
-           <el-button size="mini" type="text" 
-           v-if="scope.row.auditStatus=='2'" >审核通过</el-button
-          >
-           <el-button size="mini" type="text" 
-           v-if="scope.row.auditStatus=='3'" >审核不通过</el-button
-          >
-          <!-- <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:dict:remove']"
-            >删除</el-button
-          > -->
-        </template>
-      </el-table-column>
-    </el-table>
-
-<div style="margin-top:20px">
-
-
-    <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage1"
-          :page-sizes="[10, 20, 30, 50]"
-          :page-size="10"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="num"
-        ></el-pagination>
-</div>
-    <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="审核说明">
-          <el-input v-model="form.comment" />
-        </el-form-item>
-        
-        <el-form-item label="审核状态">
-        <el-select v-model="form.status" placeholder="请选择状态">
-          <el-option
-            label="通过"
-            value='2'
-           
-          ></el-option>
-          <el-option
-            label="不通过"
-            value='3'
-           
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
-  </div>
-</template>
-
 <script>
 import {
   listData,
@@ -220,9 +7,67 @@ import {
   updateData,
   exportData,
 } from "@/api/system/dict/data";
+import CommonList from '@/components/CommonList'
+import API from "@/api/system/warIndustry";
 
 export default {
   name: "Data",
+  components: { 
+    CommonList,
+  },
+  render (h) {
+    const columns = [
+      {
+        label: '成果名称',
+        prop: 'achievementName'
+      },
+      {
+        label: '成果类型',
+        prop: 'resultsType'
+      },
+      {
+        label: '简介',
+        prop: 'synopsis'
+      },
+      {
+        label: '成果展示',
+        prop: 'content'
+      },
+      {
+        label: '图片',
+        prop: 'contentImg'
+      },
+      {
+        label: '所属领域',
+        prop: 'domain'
+      },
+      {
+        label: '发布方',
+        prop: 'publisherId'
+      },
+      {
+        label: '分析',
+        prop: 'analysis'
+      },
+      {
+        label: '联系电话',
+        prop: 'phone'
+      },
+      {
+        label: '材料地址其他',
+        prop: 'materialUrl'
+      },
+      {
+        label: '联系人',
+        prop: 'contacts'
+      },
+      {
+        label: '电话',
+        prop: 'phone'
+      }
+    ]
+    return (<CommonList columns={ columns } api={ API } />)
+  },
   data() {
     return {
       value1: "",
