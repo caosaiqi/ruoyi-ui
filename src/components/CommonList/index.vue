@@ -1,6 +1,9 @@
 
 <script>
+import * as R from 'ramda'
 import DialogCheck from './DialogCheck'
+import SearchBox from './SearchBox'
+
 export default {
   name: "Data",
   props: {
@@ -73,6 +76,13 @@ export default {
       this.queryParams.page = val;
       this.getList();
     },
+    doSearch (val) {
+      const _searchParams = R.clone(val)
+      const query = R.forEachObjIndexed((value, key) => {
+        if (value === '') delete _searchParams[key]
+      }, _searchParams)
+      this.getList(_searchParams)
+    }
   },
   render () {
     const tableProps = {
@@ -130,6 +140,7 @@ export default {
 
     return (
       <div class="app-container">
+        <SearchBox onSearch={ this.doSearch } />
         <el-table {...{ props: tableProps }}>
           <RenderColumns />
           <RenderColumAction />

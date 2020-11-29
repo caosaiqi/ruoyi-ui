@@ -5,10 +5,10 @@ import API from "@/api/system/opensource";
 
 export default {
   name: "Data",
-  components: { 
+  components: {
     CommonList,
   },
-  render () {
+  render (h) {
     const columns = [
       {
         label: '深度分析',
@@ -32,7 +32,7 @@ export default {
       },
       {
         label: '所属领域',
-        prop: 'domainName'
+        prop: 'domain'
       },
       {
         label: '经费',
@@ -48,14 +48,16 @@ export default {
       },
       {
         label: '发布方',
-        prop: 'publisherName'
+        prop: 'publisherId'
       },
       {
         label: '发布人',
-        prop: 'publishUname'
+        prop: 'publishUId'
       }
     ]
-    return (<CommonList columns={ columns } api={ API } />)
+    return (
+      <CommonList columns={ columns } api={ API } />
+    )
   },
 };
 </script>
