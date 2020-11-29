@@ -1,40 +1,36 @@
 <template>
     <div :class="{'has-logo':showLogo}">
         <logo v-if="showLogo" :collapse="isCollapse" />
-        <el-scrollbar wrap-class="scrollbar-wrapper">
-            <!-- <el-menu
-                :default-active="activeMenu"
-                :collapse="isCollapse"
-                :background-color="variables.menuBg"
-                :text-color="variables.menuText"
-                :unique-opened="true"
-                :active-text-color="settings.theme"
-                :collapse-transition="false"
-                mode="vertical"
-            >
-                <sidebar-item
-                    v-for="(route, index) in permission_routes"
-                    :key="route.path  + index"
-                    :item="route"
-                    :base-path="route.path"
-                />
-            </el-menu> -->
-            <el-menu
-      default-active="2"
-      background-color="#1f2d3d "
-      text-color="#fff"
-      active-text-color="#ffd04b">
-      <!-- <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>需求发布</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1"><router-link :to="{name:'Data'}">需求发布列表</router-link></el-menu-item>
-          <el-menu-item index="1-2">需求类型</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu> -->
-      <el-menu-item index="1"><router-link :to="{name:'Data'}"><i class="el-icon-setting"></i>需求发布</router-link></el-menu-item>
+        <el-scrollbar>
+          <el-menu
+            default-active="2"
+            background-color="#1f2d3d "
+            text-color="#fff"
+            active-text-color="#ffd04b">
+            <template v-for="(item, index) in menuList">
+              <el-submenu :key="index" v-if="item.children" :index="index">
+                <template slot="title">
+                  <i class="el-icon-location"></i>
+                  <span>{{item.name}}</span>
+                </template>
+                <el-menu-item :index="`${index}-${subIndex}`" :key="subIndex" v-for="(subItem, subIndex) in item.children" >
+                  <router-link :to="{name: subItem.linkName}"><i class="el-icon-setting"></i>{{ subItem.name }}</router-link>
+                </el-menu-item>
+              </el-submenu>
+              <el-menu-item :index="index" :key="index" v-else>
+                <router-link :to="{name: item.linkName}"><i class="el-icon-setting"></i>{{ item.name }}</router-link>
+              </el-menu-item>
+            </template>
+            <!-- <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>导航一</span>
+              </template>
+               <el-menu-item index="1-1">选项1</el-menu-item>
+            </el-submenu> -->
+<!--
+      <el-menu-item index="1">
+        <router-link :to="{name:'Data'}"><i class="el-icon-setting"></i>需求发布</router-link></el-menu-item>
       <el-menu-item index="2">
         <router-link :to="{name:'JobLog'}"><i class="el-icon-setting"></i>产业创新项目推荐</router-link>
       </el-menu-item>
@@ -70,8 +66,7 @@
       </el-menu-item>
       <el-menu-item index="13">
         <router-link :to="{name:'platform'}"><i class="el-icon-setting"></i>发布方管理</router-link>
-      </el-menu-item>
-
+      </el-menu-item> -->
     </el-menu>
         </el-scrollbar>
     </div>
@@ -84,28 +79,122 @@ import SidebarItem from "./SidebarItem";
 import variables from "@/assets/styles/variables.scss";
 
 export default {
-    components: { SidebarItem, Logo },
-    computed: {
-        ...mapState(["settings"]),
-        ...mapGetters(["permission_routes", "sidebar"]),
-        activeMenu() {
-            const route = this.$route;
-            const { meta, path } = route;
-            // if set path, the sidebar will highlight the path you set
-            if (meta.activeMenu) {
-                return meta.activeMenu;
-            }
-            return path;
+  components: { SidebarItem, Logo },
+  data () {
+    return {
+      menuList: [
+        {
+          name: '首页',
+          linkName: 'Home'
         },
-        showLogo() {
-            return this.$store.state.settings.sidebarLogo;
+        {
+          name: '开源需求发布',
+          linkName: 'Data'
         },
-        variables() {
-            return variables;
+        {
+          name: '军工民技术成果',
+          linkName: 'conversion'
         },
-        isCollapse() {
-            return !this.sidebar.opened;
-        }
+        {
+          name: '先进前沿技术',
+          linkName: 'advanced'
+        },
+        {
+          name: '创新资源要素',
+          children: [
+            {
+              name: '科技创新政策',
+              linkName: 'policy'
+            },
+            {
+              name: '科技创新政策',
+              linkName: 'policy'
+            },
+            {
+              name: '项目通道资源',
+              linkName: 'resource'
+            },
+            {
+              name: '智库',
+              linkName: ''
+            },
+            {
+              name: '实验室',
+              linkName: 'laboratory'
+            },
+            {
+              name: '共享实验室设备',
+              linkName: ''
+            },
+            {
+              name: '人才/专家',
+              linkName: ''
+            },
+          ]
+        },
+        {
+          name: '资讯管理',
+          children: [
+            {
+              name: '新闻管理',
+              linkName: 'News'
+            },
+          ]
+        },
+        {
+          name: '类型管理',
+          children: [
+            {
+              name: '需求类型',
+              linkName: 'DemandType'
+            },
+            {
+              name: '成果类型',
+              linkName: 'ResultsType'
+            },
+            {
+              name: '发布方类型',
+              linkName: 'PublisherType'
+            },
+            {
+              name: '企业类型',
+              linkName: 'EnterPriseType'
+            },
+            {
+              name: '新闻类型',
+              linkName: 'NewsType'
+            },
+            {
+              name: '领域类型',
+              linkName: 'DomainType'
+            },
+          ]
+        },
+      ]
     }
+  },
+  computed: {
+    ...mapState(["settings"]),
+    ...mapGetters(["permission_routes", "sidebar"]),
+    activeMenu() {
+        const route = this.$route;
+        const { meta, path } = route;
+        // if set path, the sidebar will highlight the path you set
+        if (meta.activeMenu) {
+            return meta.activeMenu;
+        }
+        return path;
+    },
+    showLogo() {
+        return this.$store.state.settings.sidebarLogo;
+    },
+    variables() {
+        return variables;
+    },
+    isCollapse() {
+        return !this.sidebar.opened;
+    }
+  },
+
 };
 </script>

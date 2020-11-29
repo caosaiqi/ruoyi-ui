@@ -60,7 +60,7 @@ export const constantRoutes = [
       {
         path: 'index',
         component: (resolve) => require(['@/views/index'], resolve),
-        name: '首页',
+        name: 'Home',
         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
@@ -293,7 +293,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/demandType'], resolve),
-        name: 'demandType',
+        name: 'DemandType',
         meta: { title: '需求类型' }
       }
     ]
@@ -305,7 +305,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/publisherType'], resolve),
-        name: 'publisherType',
+        name: 'PublisherType',
         meta: { title: '发布方类型' }
       }
     ]
@@ -317,7 +317,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/domainType'], resolve),
-        name: 'domainType',
+        name: 'DomainType',
         meta: { title: '领域类型' }
       }
     ]
@@ -329,7 +329,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/enterPriseType'], resolve),
-        name: 'enterPriseType',
+        name: 'EnterPriseType',
         meta: { title: '企业类型' }
       }
     ]
@@ -341,7 +341,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/news'], resolve),
-        name: 'enterPriseType',
+        name: 'News',
         meta: { title: '新闻管理' }
       },
       {
@@ -353,7 +353,7 @@ export const constantRoutes = [
       {
         path: 'type',
         component: (resolve) => require(['@/views/newsType'], resolve),
-        name: 'NewsForm',
+        name: 'NewsType',
         meta: { title: '新闻类型' }
       }
     ]
@@ -365,7 +365,7 @@ export const constantRoutes = [
       {
         path: '',
         component: (resolve) => require(['@/views/resultsType'], resolve),
-        name: 'resultsType',
+        name: 'ResultsType',
         meta: { title: '成果类型' }
       }
     ]
