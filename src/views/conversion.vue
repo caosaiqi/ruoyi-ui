@@ -15,7 +15,7 @@ export default {
   components: { 
     CommonList,
   },
-  render (h) {
+  render () {
     const columns = [
       {
         label: '成果名称',
@@ -23,7 +23,7 @@ export default {
       },
       {
         label: '成果类型',
-        prop: 'resultsType'
+        prop: 'resultsTypeName'
       },
       {
         label: '简介',
@@ -43,7 +43,7 @@ export default {
       },
       {
         label: '发布方',
-        prop: 'publisherId'
+        prop: 'publisherName'
       },
       {
         label: '分析',
@@ -64,6 +64,10 @@ export default {
       {
         label: '电话',
         prop: 'phone'
+      },
+      {
+        label: '发布人',
+        prop: 'publishUname'
       }
     ]
     return (<CommonList columns={ columns } api={ API } />)

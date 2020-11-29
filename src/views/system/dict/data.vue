@@ -8,7 +8,7 @@ export default {
   components: { 
     CommonList,
   },
-  render (h) {
+  render () {
     const columns = [
       {
         label: '深度分析',
@@ -32,7 +32,7 @@ export default {
       },
       {
         label: '所属领域',
-        prop: 'domain'
+        prop: 'domainName'
       },
       {
         label: '经费',
@@ -48,11 +48,11 @@ export default {
       },
       {
         label: '发布方',
-        prop: 'publisherId'
+        prop: 'publisherName'
       },
       {
         label: '发布人',
-        prop: 'publishUId'
+        prop: 'publishUname'
       }
     ]
     return (<CommonList columns={ columns } api={ API } />)
