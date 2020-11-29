@@ -25,7 +25,7 @@ export default {
         page: 1,
         limit: 10,
       },
-
+      pageSizes: [10, 20, 30, 50],
       dataList: [],
     };
   },
@@ -38,9 +38,10 @@ export default {
       try {
         const { data } =  await this.api.list({...this.queryParams, ...params})
         console.log(data)
-        const { total, pageNum } = data
+        const { total: totalNumber, pageNum} = data
         Object.assign(this.queryParams, {
-          total, pageNum
+          total: totalNumber,
+          pageNum
         })
 
         this.dataList = data.list || []
@@ -132,7 +133,11 @@ export default {
       return (
         <div>
           <el-pagination
+            style="text-align: center;margin-top: 20px"
             layout="total, sizes, prev, pager, next, jumper"
+            pageSizes={ this.pageSizes }
+            pageSize={ 10 }
+            total= { this.queryParams.total }
           ></el-pagination>
         </div>
       )
