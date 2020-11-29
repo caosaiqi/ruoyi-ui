@@ -1,12 +1,12 @@
 <template>
-  <el-dialog  width="500px" append-to-body>
-    <el-form ref="form" label-width="80px">
+  <el-dialog :visible.sync="visible" title="审核" width="500px" :modal-append-to-body="false">
+    <el-form ref="form" label-width="80px" :rules="rules">
       <el-form-item label="审核说明">
         <el-input v-model="form.comment" />
       </el-form-item>
 
-      <el-form-item label="审核状态" v-model="form.status">
-        <el-select placeholder="请选择状态">
+      <el-form-item label="审核状态">
+        <el-select placeholder="请选择状态"  v-model="form.status">
           <el-option
             label="通过"
             value='2'
@@ -18,32 +18,51 @@
         </el-select>
       </el-form-item>
     </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button @click="cancel">取 消</el-button>
+    </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
   name: 'DialogCheck',
-  data() {
+  props: {
+    row: Object,
+    visible: Boolean,
+    fetchUpdate: Function
+  },
+  data () {
     return {
+
       // 表单参数
       form: {
         comment: "",
-        status: ""
+        status: "2"
       },
 
       // 表单校验
       rules: {
-        dictLabel: [
-          { required: true, message: "数据标签不能为空", trigger: "blur" }
+        comment: [
+          { required: true, message: "", trigger: "blur" }
         ],
-        dictValue: [
-          { required: true, message: "数据键值不能为空", trigger: "blur" }
-        ],
-        dictSort: [
+        status: [
           { required: true, message: "数据顺序不能为空", trigger: "blur" }
         ]
       }
+    }
+  },
+  methods: {
+    cancel()  {
+      this.$emit('cancel')
+    },
+    submit() {
+      this.fetchUpdate({
+        id: this.row.id,
+        ...this.form
+      })
     }
   }
 }

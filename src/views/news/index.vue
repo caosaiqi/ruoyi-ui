@@ -130,7 +130,7 @@ export default {
     },
 
     handleEdit (row) {
-      this.$router.push(`news/form?newsId=${row.newsId}`)
+      this.$router.push(`/news/form?newsId=${row.newsId}`)
     },
 
     async handleRemove (row) {

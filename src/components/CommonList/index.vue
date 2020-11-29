@@ -13,6 +13,7 @@ export default {
   },
   data() {
     return {
+      actionRow: {},
       loading: true,
       dialogCheckVisible: false,
       typeOptions: [],
@@ -52,21 +53,18 @@ export default {
       this.open = true;
       this.demandId = scope.demandId;
     },
-    submitForm() {
-      var obj = {
-        id: this.demandId,
-        status: this.form.status,
-        comment: this.form.comment
-      };
-      this.$api.Demand.ifok(obj).then(res => {
-        console.log(res);
-      });
+
+    async submitForm(params) {
+      try {
+        const { code } = await this.api.update(params)
+        if (code === 200) {
+          this.dialogCheckVisible = false
+        }
+      } catch (err) {
+        throw err
+      }
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
+
     handleSizeChange(val) {
       this.queryParams.limit = val;
       this.getList();
@@ -77,7 +75,6 @@ export default {
     },
   },
   render () {
-    console.log(this.dataList)
     const tableProps = {
       data: this.dataList
     }
@@ -86,6 +83,7 @@ export default {
       return this.columns.map(item => {
         const props = {
           align:'center',
+          showOverflowTooltip: true,
           ...item,
         }
         return <el-table-column  {...{ props }} />
@@ -93,8 +91,9 @@ export default {
     }
 
     const RenderColumAction = () => {
-      const handleClick = () => {
-
+      const handleClick = (row) => {
+        this.dialogCheckVisible = true
+        this.actionRow = row
       }
       const scopedSlots = {
         default: ({ row }) => {
@@ -103,12 +102,17 @@ export default {
             2: '审核通过',
             3: '审核不通过'
           }
-          if (row.auditStatus == 1) {
+          const types = {
+            2: 'success',
+            3: 'danger'
+          }
+          if (row.status == 1) {
             return (
-              <el-button onClcik={handleClick} size="mini" type="text">审核</el-button>
+              <el-button onClick={() => handleClick(row)} size="mini" type="text">审核</el-button>
             )
           }
-          return  <el-button  type="text" size="mini">{texts[row.auditStatus]}</el-button>
+
+          return <el-tag size="mini"  type={types[row.status]}> {texts[row.auditStatus]} </el-tag>
         }
       }
       return <el-table-column label='操作' {...{scopedSlots}} />
@@ -124,41 +128,18 @@ export default {
       )
     }
 
-    const RenderDialog = () => {
-      return (
-         <el-dialog  width="500px" append-to-body>
-            <el-form ref="form" label-width="80px">
-              <el-form-item label="审核说明">
-                <el-input  />
-              </el-form-item>
-
-              <el-form-item label="审核状态">
-              <el-select  placeholder="请选择状态">
-                <el-option
-                  label="通过"
-                  value='2'
-
-                ></el-option>
-                <el-option
-                  label="不通过"
-                  value='3'
-
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            </el-form>
-          </el-dialog>
-      )
-    }
-
     return (
       <div class="app-container">
-       <el-table {...{ props: tableProps }}>
+        <el-table {...{ props: tableProps }}>
           <RenderColumns />
           <RenderColumAction />
         </el-table>
         <RenderPagination />
-        <DialogCheck visible={this.dialogCheckVisible} />
+        <DialogCheck
+          row={this.actionRow}
+          fetchUpdate={ this.submitForm }
+          onCancel={() => this.dialogCheckVisible = false}
+          visible={this.dialogCheckVisible} />
       </div>
     )
   }
