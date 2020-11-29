@@ -28,8 +28,7 @@
           >搜索</el-button
         >
         <el-button
-          type="cyan"
-          icon="el-icon-search"
+          icon="el-icon-refres"
           size="mini"
           @click="initList()"
           >全部</el-button

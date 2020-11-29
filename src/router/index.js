@@ -333,6 +333,24 @@ export const constantRoutes = [
         meta: { title: '企业类型' }
       }
     ]
+  },
+  {
+    path: '/news',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/news'], resolve),
+        name: 'enterPriseType',
+        meta: { title: '新闻管理' }
+      },
+      {
+        path: 'form',
+        component: (resolve) => require(['@/views/news/form'], resolve),
+        name: 'NewsForm',
+        meta: { title: '新闻编辑' }
+      }
+    ]
   }
 ]
 

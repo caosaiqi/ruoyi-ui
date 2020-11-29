@@ -1,5 +1,15 @@
 <template>
-    <div class="editor" ref="editor" :style="styles"></div>
+   <div>
+      <el-upload
+        accept='.jpg,.png,.gif,.jpeg'
+        action="http://192.168.0.50/file/upload"
+        class="avatar-uploader"
+        :onSuccess="imageSuccess"
+        hidden
+       >
+      </el-upload>
+      <div class="editor" ref="editor" :style="styles"></div>
+   </div>
 </template>
 
 <script>
@@ -37,18 +47,31 @@ export default {
         debug: "warn",
         modules: {
           // 工具栏配置
-          toolbar: [
-            ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
-            ["blockquote", "code-block"],                    // 引用  代码块
-            [{ list: "ordered" }, { list: "bullet" }],       // 有序、无序列表
-            [{ indent: "-1" }, { indent: "+1" }],            // 缩进
-            [{ size: ["small", false, "large", "huge"] }],   // 字体大小
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],         // 标题
-            [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
-            [{ align: [] }],                                 // 对齐方式
-            ["clean"],                                       // 清除文本格式
-            ["link", "image", "video"]                       // 链接、图片、视频
-          ],
+
+          toolbar: {
+            container: [
+              ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
+              ["blockquote", "code-block"],                    // 引用  代码块
+              [{ list: "ordered" }, { list: "bullet" }],       // 有序、无序列表
+              [{ indent: "-1" }, { indent: "+1" }],            // 缩进
+              [{ size: ["small", false, "large", "huge"] }],   // 字体大小
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],         // 标题
+              [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
+              [{ align: [] }],                                 // 对齐方式
+              ["clean"],                                       // 清除文本格式
+              ["link", "image"]                       // 链接、图片、视频
+            ],
+            handlers: {
+              'image': function (value) {
+                if (value) {
+                  document.querySelector('.avatar-uploader input').click()
+                } else {
+                  this.quill.format('image', false);
+                }
+              }
+            }
+          }
+          // toolbar: '#editor_header'
         },
         placeholder: "请输入内容",
         readOnly: false,
@@ -87,8 +110,16 @@ export default {
     this.Quill = null;
   },
   methods: {
+    imageSuccess (response, file, fileList) {
+      console.log(response, file, fileList)
+      const html = this.$refs.editor.children[0].innerHTML;
+      const { url } = response
+      this.Quill.pasteHTML(`${html}<p><img style="width: 400px" src="${url}" /></p>`);
+      this.$emit("input",  this.$refs.editor.children[0].innerHTML);
+    },
     init() {
       const editor = this.$refs.editor;
+
       this.Quill = new Quill(editor, this.options);
       this.Quill.pasteHTML(this.currentValue);
       this.Quill.on("text-change", (delta, oldDelta, source) => {
