@@ -11,5 +11,6 @@ export function setToken(token) {
 }
 
 export function removeToken() {
+  sessionStorage.removeItem("Token")
   return Cookies.remove(TokenKey)
 }

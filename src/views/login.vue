@@ -87,15 +87,15 @@ export default {
     };
   },
   watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true
-    }
+    // $route: {
+    //   handler: function(route) {
+    //     this.redirect = route.query && route.query.redirect;
+    //   },
+    //   immediate: true
+    // }
   },
   created() {
-    this.getCode();
+    // this.getCode();
     // this.getCookie();
   },
   methods: {
@@ -149,7 +149,7 @@ export default {
         // validateCode:this.loginForm.code,
         rememberMe: false,
       };
-   
+
       this.$api.Login.login(sendData).then(res => {
         //console.log(res);
         if (res.code == 200) {

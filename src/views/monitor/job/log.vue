@@ -54,62 +54,12 @@
           @click="handleQuery"
           >搜索</el-button
         >
-        <!-- <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button> -->
       </el-form-item>
     </el-form>
-<!-- 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:dict:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:dict:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:dict:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:dict:export']"
-          >导出</el-button
-        >
-      </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row> -->
     <el-table
       v-loading="loading"
       :data="dataList"
-    
+
     >
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="项目名称" align="center" prop="projectName" :show-overflow-tooltip="true" />
@@ -125,7 +75,7 @@
         label="数据包材料"
         align="center"
         prop="analysis"
-        
+
       >
       <template slot-scope="scope">
           <a :href="scope.row.materialUrl" download="">数据材料</a>
@@ -150,36 +100,27 @@
           <el-button size="mini" type="text" @click="handleUpdate(scope.row)"
            v-if="scope.row.auditStatus=='1'" >审核</el-button
           >
-           <el-button size="mini" type="text" 
+           <el-button size="mini" type="text"
            v-if="scope.row.auditStatus=='2'" >审核通过</el-button
           >
-           <el-button size="mini" type="text" 
+           <el-button size="mini" type="text"
            v-if="scope.row.auditStatus=='3'" >审核不通过</el-button
           >
-          <!-- <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:dict:remove']"
-            >删除</el-button
-          > -->
+
         </template>
       </el-table-column>
     </el-table>
 
 <div style="margin-top:20px">
-
-
-    <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage1"
-          :page-sizes="[10, 20, 30, 50]"
-          :page-size="10"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="num"
-        ></el-pagination>
+  <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage1"
+        :page-sizes="[10, 20, 30, 50]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="num"
+      ></el-pagination>
 </div>
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -187,18 +128,18 @@
         <el-form-item label="审核说明">
           <el-input v-model="form.comment" />
         </el-form-item>
-        
+
         <el-form-item label="审核状态">
         <el-select v-model="form.status" placeholder="请选择状态">
           <el-option
             label="通过"
             value='2'
-           
+
           ></el-option>
           <el-option
             label="不通过"
             value='3'
-           
+
           ></el-option>
         </el-select>
       </el-form-item>
@@ -345,7 +286,7 @@ this.pageIndex=1
         // console.log(res)
         if (res.code == 200) {
           this.dataList = res.data.industryRecommendList;
-          this.num=Number(res.data.totalNumber) 
+          this.num=Number(res.data.totalNumber)
 
           this.loading = false;
         }
@@ -361,11 +302,11 @@ this.pageIndex=1
           id:this.demandId,
           status:this.form.status,
           comment:this.form.comment
-          
+
         }
          this.$api.Log.ifok(obj).then((res) => {
         console.log(res)
-       
+
       });
     },
     // 取消按钮

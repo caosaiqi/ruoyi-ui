@@ -4,7 +4,7 @@ import request from '@/utils/request'
 export function listRole(query) {
   return request({
     url: '/system/role/list',
-    method: 'get',
+    method: 'post',
     params: query
   })
 }
@@ -12,7 +12,7 @@ export function listRole(query) {
 // 查询角色详细
 export function getRole(roleId) {
   return request({
-    url: '/system/role/' + roleId,
+    url: `/system/role/authDataScope/${roleId}`,
     method: 'get'
   })
 }
@@ -52,7 +52,7 @@ export function changeRoleStatus(roleId, status) {
   }
   return request({
     url: '/system/role/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -69,6 +69,16 @@ export function delRole(roleId) {
 export function exportRole(query) {
   return request({
     url: '/system/role/export',
+    method: 'get',
+    params: query
+  })
+}
+
+
+
+export function systemMenuList(query) {
+  return request({
+    url: '/system/menu/menuTreeData',
     method: 'get',
     params: query
   })

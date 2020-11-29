@@ -349,9 +349,27 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/news/form'], resolve),
         name: 'NewsForm',
         meta: { title: '新闻编辑' }
+      },
+      {
+        path: 'type',
+        component: (resolve) => require(['@/views/newsType'], resolve),
+        name: 'NewsForm',
+        meta: { title: '新闻类型' }
       }
     ]
-  }
+  },
+  {
+    path: '/resultsType',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: (resolve) => require(['@/views/resultsType'], resolve),
+        name: 'resultsType',
+        meta: { title: '成果类型' }
+      }
+    ]
+  },
 ]
 
 export default new Router({

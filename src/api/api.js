@@ -14,7 +14,7 @@ const apis = {
     },
     letuser(params){
       return request.get('/order-server/order/user/public/shop/getShopInfoByUserId',{params})
-    }  
+    }
   },
   //需求发布
   Demand:{
@@ -32,9 +32,9 @@ const apis = {
     },
     //审核通过
     ifok(params){
-      return request.put('/wms/demand/updateDemand',params)
+      return request.post('/wms/demand/updateDemand',params)
     },
-    
+
   },
   //产业创新
   Log:{
@@ -46,7 +46,7 @@ const apis = {
     ifok(params){
       return request.put('/wms/recommend/updateRecommend',params)
     },
- 
+
   },
    //公共平台
    Platform:{
@@ -63,7 +63,7 @@ const apis = {
       return request.get('/wms/technologyAchievementManager/findByAllPage',{params})
     },
   }
- 
-  
+
+
 }
 export default apis

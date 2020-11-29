@@ -106,6 +106,7 @@
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <el-switch
+            :disabled="scope.row.admin"
             v-model="scope.row.status"
             active-value="0"
             inactive-value="1"
@@ -120,26 +121,28 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <!--  v-hasPermi="['system:role:edit']" -->
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
           >修改</el-button>
+           <!-- v-hasPermi="['system:role:edit']" -->
           <el-button
             size="mini"
             type="text"
             icon="el-icon-circle-check"
             @click="handleDataScope(scope.row)"
-            v-hasPermi="['system:role:edit']"
+
           >数据权限</el-button>
+          <!-- v-hasPermi="['system:role:remove']" -->
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:role:remove']"
+
           >删除</el-button>
         </template>
       </el-table-column>
@@ -244,7 +247,7 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
+import { listRole, systemMenuList } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 
@@ -337,9 +340,9 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
+    // this.getDicts("sys_normal_disable").then(response => {
+    //   this.statusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询角色列表 */
@@ -500,20 +503,28 @@ export default {
       this.title = "添加角色";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    async handleUpdate(row) {
       this.reset();
-      const roleId = row.roleId || this.ids
-      const roleMenu = this.getRoleMenuTreeselect(roleId);
-      getRole(roleId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.$nextTick(() => {
-          roleMenu.then(res => {
-            this.$refs.menu.setCheckedKeys(res.checkedKeys);
-          });
-        });
-        this.title = "修改角色";
-      });
+      // const roleId = row.roleId || this.ids
+      // const roleMenu = this.getRoleMenuTreeselect(roleId);
+      // getRole(roleId).then(response => {
+      //   this.form = response.data;
+      //   this.open = true;
+      //   this.$nextTick(() => {
+      //     roleMenu.then(res => {
+      //       this.$refs.menu.setCheckedKeys(res.checkedKeys);
+      //     });
+      //   });
+      //   this.title = "修改角色";
+      // });
+      try {
+        const ret = await systemMenuList({
+          userId: row.roleId
+        })
+        console.log(ret)
+      } catch (err) {
+        throw err
+      }
     },
     /** 分配数据权限操作 */
     handleDataScope(row) {
